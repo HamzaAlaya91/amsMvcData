@@ -62,4 +62,14 @@ public class ProviderController {
 		return "redirect:list";
 	}
 
+	@GetMapping("delete/{id}")
+	public String deleteProvider(@PathVariable("id") long id, Model model) {
+		Provider provider = providerRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid provider Id:" + id));
+		System.out.println("suite du programme...");
+		providerRepository.delete(provider);
+
+		return "redirect:../list";
+	}
+
 }
