@@ -1,5 +1,7 @@
 package com.project.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import com.project.repository.ProviderRepository;
 @RequestMapping("/provider/")
 public class ProviderController {
 
+	// injection de dependance + IOC
 	private final ProviderRepository providerRepository;
 
 	@Autowired
@@ -27,7 +30,10 @@ public class ProviderController {
 
 	@GetMapping("list")
 	public String listProviders(Model model) {
-		model.addAttribute("providers", providerRepository.findAll());
+		List<Provider> lp = (List<Provider>) providerRepository.findAll();
+		if (lp.size() == 0)
+			lp = null ;
+		model.addAttribute("providers", lp);
 		return "provider/listProviders";
 
 	}
@@ -40,7 +46,7 @@ public class ProviderController {
 	}
 
 	@PostMapping("add")
-	public String addProvider(@Valid Provider provider, BindingResult result, Model model) {
+	public String addProvider(@Valid Provider provider, BindingResult result) {  // BindingResult lié à @Valid : corresapondance entre les iputs et les valeurs
 		if (result.hasErrors()) {
 			return "provider/addProvider";
 		}
